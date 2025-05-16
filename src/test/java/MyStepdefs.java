@@ -13,6 +13,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class MyStepdefs {
     private String email;
     WebDriver driver = new ChromeDriver();
@@ -33,11 +35,6 @@ public class MyStepdefs {
         driver.findElement(By.cssSelector("a[href='/join']")).click();
         driver.findElement(By.cssSelector("a[href='/NewSupporterAccount']")).click();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-//        WebElement dateInput = driver.findElement(By.id("dp"));
-//        dateInput.click();
-//        dateInput.sendKeys("01/01/2000");
-
         driver.findElement(By.id("dp")).sendKeys("01/01/2000");
         driver.findElement(By.id("member_firstname")).sendKeys("Kalle");
         driver.findElement(By.id("member_lastname")).sendKeys("Nilson");
@@ -50,6 +47,24 @@ public class MyStepdefs {
         driver.findElement(By.id("signupunlicenced_confirmpassword"))
                 .sendKeys("abc123456789");
         Thread.sleep(2000);
+    }
+    @When("I try to create an account without last name")
+    public void iTryToCreateAnAccountWithoutLastName() {
+        driver.findElement(By.cssSelector("a[href='/join']")).click();
+        driver.findElement(By.cssSelector("a[href='/NewSupporterAccount']")).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.findElement(By.id("dp")).sendKeys("01/01/2000");
+        driver.findElement(By.id("member_firstname")).sendKeys("Olle");
+
+        WebElement emailField = driver.findElement(By.id("member_emailaddress"));
+        emailField.sendKeys("KalleNils7n@mailnesia.com");
+        WebElement emailFieldConfrim = driver.findElement(By.id("member_confirmemailaddress"));
+        emailFieldConfrim.sendKeys("KalleNils7n@mailnesia.com");
+        driver.findElement(By.id("signupunlicenced_password"))
+                .sendKeys("abc123456789");
+        driver.findElement(By.id("signupunlicenced_confirmpassword"))
+                .sendKeys("abc123456789");
+
     }
 
     @And("The user select terms and conditions")
@@ -80,4 +95,72 @@ public class MyStepdefs {
 
     }
 
+    @Then("The user sees a message that last name is required")
+    public void theUserSeesAMessageThatLastNameIsRequired(String PasswordNeeds) {
+        WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'" + PasswordNeeds + "')]")
+        ));
+        assertTrue(message.isDisplayed());
+        driver.quit(); // Stäng webbläsaren efter testet
+
+    }
+
+    @When("I create an account without confrim pass")
+    public void iCreateAnAccountWithoutConfrimPass() {
+        driver.findElement(By.cssSelector("a[href='/join']")).click();
+        driver.findElement(By.cssSelector("a[href='/NewSupporterAccount']")).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.findElement(By.id("dp")).sendKeys("01/01/2000");
+        driver.findElement(By.id("member_firstname")).sendKeys("Olle");
+        driver.findElement(By.id("member_lastname")).sendKeys("Nilson");
+        WebElement emailField = driver.findElement(By.id("member_emailaddress"));
+        emailField.sendKeys("KalleNils7n@mailnesia.com");
+        WebElement emailFieldConfrim = driver.findElement(By.id("member_confirmemailaddress"));
+        emailFieldConfrim.sendKeys("KalleNils7n@mailnesia.com");
+        driver.findElement(By.id("signupunlicenced_password"))
+                .sendKeys("abc123456789");
+//        driver.findElement(By.id("signupunlicenced_confirmpassword"))
+//                .sendKeys("abc123456789");
+    }
+
+    @Then("The user sees a message that password confirmation does not match")
+    public void theUserSeesAMessageThatPasswordConfirmationDoesNotMatch() {
+        WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'Password confirmation does not match')]")
+        ));
+        assertTrue(message.isDisplayed());
+        driver.quit();
+    }
+
+    @When("I create an account without accepting terms and conditions")
+    public void iCreateAnAccountWithoutAcceptingTermsAndConditions() {
+        driver.findElement(By.cssSelector("a[href='/join']")).click();
+        driver.findElement(By.cssSelector("a[href='/NewSupporterAccount']")).click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.findElement(By.id("dp")).sendKeys("01/01/2000");
+
+        driver.findElement(By.id("member_firstname")).sendKeys("Kalle");
+        driver.findElement(By.id("member_lastname")).sendKeys("Nilson");
+        WebElement emailField = driver.findElement(By.id("member_emailaddress"));
+        emailField.sendKeys("KalleNils7n@mailnesia.com");
+        WebElement emailFieldConfrim = driver.findElement(By.id("member_confirmemailaddress"));
+        emailFieldConfrim.sendKeys("KalleNils7n@mailnesia.com");
+        driver.findElement(By.id("signupunlicenced_password"))
+                .sendKeys("abc123456789");
+        driver.findElement(By.id("signupunlicenced_confirmpassword"))
+                .sendKeys("abc123456789");
+    }
+
+    @Then("The user sees a message that terms and conditions must be accepted")
+    public void theUserSeesAMessageThatTermsAndConditionsMustBeAccepted() throws InterruptedException {
+        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("span[data-valmsg-for='TermsAccept']")));
+
+        assertTrue(error.isDisplayed());
+        System.out.println("Felmeddelande: " + error.getText());
+    }
 }
+
+
+
