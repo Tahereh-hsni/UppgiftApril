@@ -155,7 +155,7 @@ public class MyStepdefs {
     @Then("The user sees a message that terms and conditions must be accepted")
     public void theUserSeesAMessageThatTermsAndConditionsMustBeAccepted() throws InterruptedException {
         WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("span[data-valmsg-for='TermsAccept']")));
+                By.cssSelector("#signup_form > div:nth-child(12) > div > div:nth-child(2) > div:nth-child(1) > span > span")));
 
         assertTrue(error.isDisplayed());
         System.out.println("Felmeddelande: " + error.getText());

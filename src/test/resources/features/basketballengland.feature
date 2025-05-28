@@ -30,4 +30,5 @@ Feature: Test of basketballengland
     When I create an account without accepting terms and conditions
     And I am aged over 18 or am a person with parental responsibility
     And I have read, understood and agree to adhere to the Basketball England Code of Ethics and Conduct
+    And Confirm and submit btn
     Then The user sees a message that terms and conditions must be accepted
